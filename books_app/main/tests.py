@@ -138,12 +138,16 @@ class MainTests(unittest.TestCase):
         login()
         # TODO: Make a GET request to the URL /book/1, check to see that the
         # status code is 200
-
+        response = self.app.get('/book/1', follow_redirects=True)
+        self.assertEqual(response.status_code, 200)
         # TODO: Check that the response contains the book's title, publish date,
         # and author's name
-
+        response_text = response.get_data(as_text=True)
+        self.assertIn('Book Title', response_text)
+        self.assertIn('Publish Date', response_text)
+        self.assertIn('Author', response_text)
         # TODO: Check that the response contains the 'Favorite' button
-        pass
+         self.assertIn('Favorite', response_text)
 
     def test_update_book(self):
         """Test updating a book."""
