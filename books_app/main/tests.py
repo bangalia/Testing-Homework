@@ -225,10 +225,21 @@ class MainTests(unittest.TestCase):
         self.assertEqual(created_author.biography, 'Insert bio here')
 
     def test_create_genre(self):
-        # TODO: Make a POST request to the /create_genre route, 
+        # Makes a POST request to the /create_genre route, 
+        create_books()
+        create_user()
+        login(self.app, 'me1', 'password')
 
-        # TODO: Verify that the genre was updated in the database
-        pass
+          post_data = {
+            'name': 'Some Genre',
+            'books': []
+        }
+        self.app.post('/create_genre', data=post_data)
+
+        # Verifies that the genre was updated in the database
+        created_genre = Genre.query.filter_by(name='Some Genre').one()
+        self.assertIsNotNone(created_genre)
+        self.assertEqual(created_genre.name, 'Some Genre')
 
     def test_profile_page(self):
         # TODO: Make a GET request to the /profile/1 route
