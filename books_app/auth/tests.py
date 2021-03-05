@@ -60,16 +60,16 @@ class AuthTests(TestCase):
     def test_signup_existing_user(self):
         # tests for the signup route. It should:
         # - Creates a user
-         post_data = {
-            'username': 'Some Name',
-            'password': '000'
+        post_data = {
+            'username': 'Your name',
+            'password': '123'
         }
         self.app.post('/signup', data=post_data)
 
         # - Makes a POST request to /signup, sending the same username & password
         post_data = {
-            'username': 'Some Name',
-            'password': '000'
+            'username': 'Best Name',
+            'password': '404'
         }
         response = self.app.post('/signup', data=post_data)
 
@@ -97,13 +97,13 @@ class AuthTests(TestCase):
         # - Makes a POST request to /login, sending a username & password
 
         post_data = {
-            'username': 'Some Name',
+            'username': 'Chicken Soup',
             'password': 'password'
         }
         response = self.app.post('/login', data=post_data)
         # - Checks that the login form is displayed again, with an appropriate
         #   error message
-         response_text = response.get_data(as_text=True)
+        response_text = response.get_data(as_text=True)
         self.assertIn('No user with that username. Please try again.', response_text)
 
     def test_login_incorrect_password(self):
@@ -135,7 +135,7 @@ class AuthTests(TestCase):
         }
         self.app.post('/login', data=post_data)
         # - Makes a GET request to /logout
-         self.app.get('/logout', data=post_data)
+        self.app.get('/logout', data=post_data)
         # - Checks that the "login" button appears on the homepage
-         response_text = response.get_data(as_text=True)
+        response_text = response.get_data(as_text=True)
         self.assertNotIn('Log Out', response_text)
