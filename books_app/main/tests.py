@@ -213,11 +213,16 @@ class MainTests(unittest.TestCase):
         create_user()
         login(self.app, 'me1', 'password')
         # TODO: Make a POST request to the /create_author route
-        response = self.app.post('/create_author', data=post_data)
+        post_data = {
+            'name': 'An Author',
+            'biography': 'Insert bio here...',
+            'books': []
+        }
+        self.app.post('/create_author', data=post_data)
         # TODO: Verify that the author was updated in the database
-        created_author = 
+        created_author =  Author.query.filter_by(name='An Author').one()
         self.assertIsNotNone(created_author)
-        self.assertEqual(created_book.author.name, 'Harper Lee')
+        self.assertEqual(created_author.biography, 'Insert bio here')
 
     def test_create_genre(self):
         # TODO: Make a POST request to the /create_genre route, 
