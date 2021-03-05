@@ -45,8 +45,18 @@ class AuthTests(TestCase):
     def test_signup(self):
         # TODO: Write a test for the signup route. It should:
         # - Make a POST request to /signup, sending a username & password
+        post_data = {
+            'username': 'Some Name',
+            'password': '000'
+        }
+        self.app.post('/signup', data=post_data)
         # - Check that the user now exists in the database
-        pass
+         response = self.app.get('/', follow_redirects=True)
+        self.assertEqual(response.status_code, 200)
+
+        response_text = response.get_data(as_text=True)
+        self.assertIn('Some Name', response_text)
+       
 
     def test_signup_existing_user(self):
         # TODO: Write a test for the signup route. It should:
