@@ -113,7 +113,6 @@ class MainTests(unittest.TestCase):
         """Test that the book appears on its detail page."""
         # TODO: Use helper functions to create books, authors, user
         create_books()
-        create_author()
         create_user()
         # TODO: Make a GET request to the URL /book/1, check to see that the
         # status code is 200
@@ -123,7 +122,7 @@ class MainTests(unittest.TestCase):
         # and author's name
         response_text = response.get_data(as_text=True)
         self.assertIn('Book Title', response_text)
-        self.assertIn('Publish Date', response_text)
+        self.assertIn('Publish date', response_text)
         self.assertIn('Author', response_text)
         # TODO: Check that the response does NOT contain the 'Favorite' button
         # (it should only be shown to logged in users)
@@ -133,9 +132,8 @@ class MainTests(unittest.TestCase):
         """Test that the book appears on its detail page."""
         # TODO: Use helper functions to create books, authors, user, & to log in
         create_books()
-        create_author()
         create_user()
-        login()
+        login(self.app, 'me1', 'password')
         # TODO: Make a GET request to the URL /book/1, check to see that the
         # status code is 200
         response = self.app.get('/book/1', follow_redirects=True)
@@ -144,10 +142,10 @@ class MainTests(unittest.TestCase):
         # and author's name
         response_text = response.get_data(as_text=True)
         self.assertIn('Book Title', response_text)
-        self.assertIn('Publish Date', response_text)
+        self.assertIn('Publish date', response_text)
         self.assertIn('Author', response_text)
         # TODO: Check that the response contains the 'Favorite' button
-         self.assertIn('Favorite', response_text)
+        self.assertIn('Favorite', response_text)
 
     def test_update_book(self):
         """Test updating a book."""
@@ -212,10 +210,14 @@ class MainTests(unittest.TestCase):
 
     def test_create_author(self):
         """Test creating an author."""
+        create_user()
+        login(self.app, 'me1', 'password')
         # TODO: Make a POST request to the /create_author route
-
+        response = self.app.post('/create_author', data=post_data)
         # TODO: Verify that the author was updated in the database
-        pass
+        created_author = 
+        self.assertIsNotNone(created_author)
+        self.assertEqual(created_book.author.name, 'Harper Lee')
 
     def test_create_genre(self):
         # TODO: Make a POST request to the /create_genre route, 
