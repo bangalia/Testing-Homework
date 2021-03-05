@@ -230,7 +230,7 @@ class MainTests(unittest.TestCase):
         create_user()
         login(self.app, 'me1', 'password')
 
-          post_data = {
+        post_data = {
             'name': 'Some Genre',
             'books': []
         }
@@ -242,24 +242,51 @@ class MainTests(unittest.TestCase):
         self.assertEqual(created_genre.name, 'Some Genre')
 
     def test_profile_page(self):
-        # TODO: Make a GET request to the /profile/1 route
+        # Makes a GET request to the /profile/1 route
+        create_books()
+        create_user()
 
-        # TODO: Verify that the response shows the appropriate user info
-        pass
+        response = self.app.get('/profile/me1', follow_redirects=True)
+        self.assertEqual(response.status_code, 200)
+
+        # Verifys that the response shows the appropriate user info
+        response_text = response.get_data(as_text=True)
+        self.assertIn("Welcome to me1's profile", response_text)
+
 
     def test_favorite_book(self):
         # TODO: Login as the user me1
+        create_books()
+        create_user()
+        login(self.app, 'me1', 'password')
 
         # TODO: Make a POST request to the /favorite/1 route
+        post_data = {
+            'book_id': 1
+        }
+        self.app.post('/favorite/1', data=post_data)
+        # Verify that the book with id 1 was added to the user's favorites
+        response = self.app.get('/profile/me1', follow_redirects=True)
+        self.assertEqual(response.status_code, 200)
 
-        # TODO: Verify that the book with id 1 was added to the user's favorites
-        pass
+        response_text = response.get_data(as_text=True)
+        self.assertIn("To Kill a Mockingbird", response_text)
 
     def test_unfavorite_book(self):
         # TODO: Login as the user me1, and add book with id 1 to me1's favorites
+        create_books()
+        create_user()
+        login(self.app, 'me1', 'password')
 
         # TODO: Make a POST request to the /unfavorite/1 route
-
+        post_data = {
+            'book_id': 1
+        }
+        self.app.post('/favorite/1', data=post_data)
         # TODO: Verify that the book with id 1 was removed from the user's 
         # favorites
-        pass
+        response = self.app.get('/profile/me1', follow_redirects=True)
+        self.assertEqual(response.status_code, 200)
+
+        response_text = response.get_data(as_text=True)
+        self.assertNotIn("To Kill a Mockingbird", response_text)
